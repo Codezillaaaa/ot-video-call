@@ -1,11 +1,9 @@
 let localVideo = document.getElementById("local-video")
 let remoteVideo = document.getElementById("remote-video")
 
-localVideo.style.opacity = 0
-remoteVideo.style.opacity = 0
 
-localVideo.onplaying = () => { localVideo.style.opacity = 1 }
-remoteVideo.onplaying = () => { remoteVideo.style.opacity = 1 }
+// Removed opacity logic to ensure video is always visible
+
 
 
 let peer
