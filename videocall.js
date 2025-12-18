@@ -140,9 +140,21 @@ function toggleAudio(b) {
     }
 }
 
+// Debounce flag to prevent rapid flip camera clicks
+let isFlippingCamera = false;
+const FLIP_COOLDOWN_MS = 1500; // 1.5 second cooldown between flips
+
 // Robust flip camera - uses device enumeration instead of facingMode
 // Works on all devices including Xiaomi, Samsung, etc.
 async function flipCamera() {
+    // Prevent rapid clicks - causes black screen on some devices
+    if (isFlippingCamera) {
+        console.log('Camera flip in progress, ignoring click');
+        return;
+    }
+
+    isFlippingCamera = true;
+
     try {
         // Refresh device list
         const devices = await navigator.mediaDevices.enumerateDevices();
@@ -150,6 +162,7 @@ async function flipCamera() {
 
         if (videoDevices.length < 2) {
             console.log('Only one camera available, cannot flip');
+            isFlippingCamera = false;
             return;
         }
 
@@ -216,6 +229,11 @@ async function flipCamera() {
         } catch (fallbackError) {
             console.error('Fallback also failed:', fallbackError);
         }
+    } finally {
+        // Reset debounce flag after cooldown period
+        setTimeout(() => {
+            isFlippingCamera = false;
+        }, FLIP_COOLDOWN_MS);
     }
 }
 
