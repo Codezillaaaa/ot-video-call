@@ -1,19 +1,36 @@
 html, body {
     padding: 0;
     margin: 0;
+    background: #000;
+    overflow: hidden;
 }
 
+/* Full screen video for remote user */
 .primary-video {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
+    z-index: 1;
 }
 
+/* Small preview for local camera - top right corner */
 .secondary-video {
     position: absolute;
-    max-width: 20%;
-    width: 20%;
-    margin: 5px;
-    border-radius: 10px;
+    top: 10px;
+    right: 10px;
+    width: 120px;
+    height: 160px;
+    border-radius: 12px;
+    object-fit: cover;
+    z-index: 10;
+    border: 2px solid #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* Initial state - both videos hidden until playing */
+video {
+    background: #000;
 }
