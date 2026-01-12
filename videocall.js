@@ -13,30 +13,6 @@ let remoteProfilePicUrl = '';
 // Default avatar SVG as data URI
 const DEFAULT_AVATAR = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#444"/><circle cx="50" cy="35" r="20" fill="#666"/><ellipse cx="50" cy="85" rx="30" ry="25" fill="#666"/></svg>');
 
-// Initialize profile picture from URL parameter
-function initProfilePicture() {
-    try {
-        const imgElement = document.getElementById('remote-profile-pic');
-        if (imgElement) {
-            // Set fallback on error
-            imgElement.onerror = function () {
-                this.src = DEFAULT_AVATAR;
-            };
-
-            const urlParams = new URLSearchParams(window.location.search);
-            const profilePic = urlParams.get('profilePic');
-            if (profilePic) {
-                remoteProfilePicUrl = decodeURIComponent(profilePic);
-                imgElement.src = remoteProfilePicUrl;
-            } else {
-                imgElement.src = DEFAULT_AVATAR;
-            }
-        }
-    } catch (e) {
-        console.log('Error loading profile picture:', e);
-    }
-}
-
 // Show/hide profile placeholder when remote user turns camera off
 function showRemotePlaceholder(show) {
     const placeholder = document.getElementById('remote-video-placeholder');
@@ -48,6 +24,53 @@ function showRemotePlaceholder(show) {
             placeholder.classList.add('hidden');
             remoteVideo.style.opacity = 1;
         }
+    }
+}
+
+// Show/hide local profile placeholder when I turn my camera off
+function showLocalPlaceholder(show) {
+    const placeholder = document.getElementById('local-video-placeholder');
+    if (placeholder) {
+        if (show) {
+            placeholder.classList.remove('hidden');
+            // We don't need to hide localVideo because z-index 15 covers z-index 10
+        } else {
+            placeholder.classList.add('hidden');
+        }
+    }
+}
+
+// Initialize profile picture from URL parameter
+function initProfilePicture() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+
+        // Remote Profile Pic
+        const imgElement = document.getElementById('remote-profile-pic');
+        if (imgElement) {
+            imgElement.onerror = function () { this.src = DEFAULT_AVATAR; };
+            const profilePic = urlParams.get('profilePic');
+            if (profilePic) {
+                imgElement.src = decodeURIComponent(profilePic);
+            } else {
+                imgElement.src = DEFAULT_AVATAR;
+            }
+        }
+
+        // Local Self Profile Pic
+        const localImgElement = document.getElementById('local-profile-pic');
+        if (localImgElement) {
+            localImgElement.onerror = function () { this.src = DEFAULT_AVATAR; };
+            const selfProfilePic = urlParams.get('selfProfilePic');
+            if (selfProfilePic) {
+                localImgElement.src = decodeURIComponent(selfProfilePic);
+            } else {
+                localImgElement.src = DEFAULT_AVATAR;
+            }
+        }
+
+    } catch (e) {
+        console.log('Error loading profile picture:', e);
     }
 }
 
@@ -259,6 +282,13 @@ function toggleVideo(b) {
         let enabled = (b == "true");
         localStream.getVideoTracks()[0].enabled = enabled;
         broadcastCameraStatus(enabled);
+
+        // Show/hide local placeholder
+        if (enabled) {
+            showLocalPlaceholder(false);
+        } else {
+            showLocalPlaceholder(true);
+        }
     }
 }
 
