@@ -6,26 +6,21 @@
 </head>
 
 <body>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.3.2/peerjs.js"></script>
 
     <video class="secondary-video" autoplay id="remote-video"></video>
 
-    <!-- Profile picture placeholder when remote user turns off camera -->
     <div id="remote-video-placeholder" class="video-placeholder hidden">
         <img id="remote-profile-pic" src="" alt="Profile" />
         <span class="camera-off-text">Camera Off</span>
     </div>
 
-    <!-- Profile picture placeholder for local self-view when camera is off -->
     <div id="local-video-placeholder" class="video-placeholder-local hidden">
         <img id="local-profile-pic" src="" alt="Profile" />
     </div>
 
     <video class="primary-video" autoplay muted id="local-video"></video>
-
     <script src="./videocall.js"></script>
-
 </body>
 
 </html>
