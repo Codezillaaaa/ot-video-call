@@ -7,6 +7,65 @@ remoteVideo.style.opacity = 0
 localVideo.onplaying = () => { localVideo.style.opacity = 1 }
 remoteVideo.onplaying = () => { remoteVideo.style.opacity = 1 }
 
+// Remote profile picture URL (passed from Android via URL param)
+let remoteProfilePicUrl = '';
+
+// Initialize profile picture from URL parameter
+function initProfilePicture() {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const profilePic = urlParams.get('profilePic');
+        if (profilePic) {
+            remoteProfilePicUrl = decodeURIComponent(profilePic);
+            const imgElement = document.getElementById('remote-profile-pic');
+            if (imgElement) {
+                imgElement.src = remoteProfilePicUrl;
+            }
+        }
+    } catch (e) {
+        console.log('Error loading profile picture:', e);
+    }
+}
+
+// Show/hide profile placeholder when remote user turns camera off
+function showRemotePlaceholder(show) {
+    const placeholder = document.getElementById('remote-video-placeholder');
+    if (placeholder) {
+        if (show) {
+            placeholder.classList.remove('hidden');
+            remoteVideo.style.opacity = 0;
+        } else {
+            placeholder.classList.add('hidden');
+            remoteVideo.style.opacity = 1;
+        }
+    }
+}
+
+// Attach mute/unmute listeners to remote video track
+function attachRemoteTrackListeners(remoteStream) {
+    if (remoteStream && remoteStream.getVideoTracks().length > 0) {
+        const videoTrack = remoteStream.getVideoTracks()[0];
+
+        videoTrack.onmute = () => {
+            console.log('Remote camera turned OFF');
+            showRemotePlaceholder(true);
+        };
+
+        videoTrack.onunmute = () => {
+            console.log('Remote camera turned ON');
+            showRemotePlaceholder(false);
+        };
+
+        // Check initial state - if track is muted from start
+        if (videoTrack.muted) {
+            showRemotePlaceholder(true);
+        }
+    }
+}
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', initProfilePicture);
+
 
 let peer
 function init(userId) {
@@ -83,6 +142,8 @@ function listen() {
                 remoteVideo.className = "primary-video"
                 localVideo.className = "secondary-video"
 
+                // Attach listeners to detect when remote user turns camera off
+                attachRemoteTrackListeners(remoteStream);
             })
 
         })
@@ -115,6 +176,9 @@ function startCall(otherUserId) {
 
             remoteVideo.className = "primary-video"
             localVideo.className = "secondary-video"
+
+            // Attach listeners to detect when remote user turns camera off
+            attachRemoteTrackListeners(remoteStream);
         })
 
     })
