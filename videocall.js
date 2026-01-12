@@ -96,6 +96,11 @@ function init(userId) {
         Android.onPeerConnected()
     })
 
+    // Handle incoming data connection
+    peer.on('connection', (conn) => {
+        setupDataConnection(conn);
+    });
+
     // Initialize camera list on peer open
     initializeCameraList();
     listen();
@@ -181,6 +186,11 @@ function startCall(otherUserId) {
         }
 
         const call = peer.call(otherUserId, stream)
+
+        // Establish data connection for signaling
+        const conn = peer.connect(otherUserId);
+        setupDataConnection(conn);
+
         call.on('stream', (remoteStream) => {
             remoteVideo.srcObject = remoteStream
 
@@ -202,9 +212,53 @@ function voiceCall(b) {
     }
 }
 
+// Data connections for signaling camera status
+let dataConnections = [];
+
+// Broadcast camera status to all connected peers
+function broadcastCameraStatus(enabled) {
+    dataConnections.forEach(conn => {
+        if (conn.open) {
+            conn.send({ type: 'camera_status', enabled: enabled });
+        }
+    });
+}
+
+function setupDataConnection(conn) {
+    dataConnections.push(conn);
+    conn.on('open', () => {
+        // Send initial state
+        if (localStream && localStream.getVideoTracks().length > 0) {
+            conn.send({
+                type: 'camera_status',
+                enabled: localStream.getVideoTracks()[0].enabled
+            });
+        }
+    });
+    conn.on('data', (data) => {
+        if (data.type === 'camera_status') {
+            if (data.enabled) {
+                console.log('Received signal: Camera ON');
+                showRemotePlaceholder(false);
+            } else {
+                console.log('Received signal: Camera OFF');
+                showRemotePlaceholder(true);
+            }
+        }
+    });
+    conn.on('close', () => {
+        dataConnections = dataConnections.filter(c => c !== conn);
+    });
+    conn.on('error', (err) => {
+        console.error('Data connection error:', err);
+    });
+}
+
 function toggleVideo(b) {
     if (localStream && localStream.getVideoTracks().length > 0) {
-        localStream.getVideoTracks()[0].enabled = (b == "true");
+        let enabled = (b == "true");
+        localStream.getVideoTracks()[0].enabled = enabled;
+        broadcastCameraStatus(enabled);
     }
 }
 
