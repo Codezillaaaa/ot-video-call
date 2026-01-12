@@ -10,16 +10,26 @@ remoteVideo.onplaying = () => { remoteVideo.style.opacity = 1 }
 // Remote profile picture URL (passed from Android via URL param)
 let remoteProfilePicUrl = '';
 
+// Default avatar SVG as data URI
+const DEFAULT_AVATAR = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#444"/><circle cx="50" cy="35" r="20" fill="#666"/><ellipse cx="50" cy="85" rx="30" ry="25" fill="#666"/></svg>');
+
 // Initialize profile picture from URL parameter
 function initProfilePicture() {
     try {
-        const urlParams = new URLSearchParams(window.location.search);
-        const profilePic = urlParams.get('profilePic');
-        if (profilePic) {
-            remoteProfilePicUrl = decodeURIComponent(profilePic);
-            const imgElement = document.getElementById('remote-profile-pic');
-            if (imgElement) {
+        const imgElement = document.getElementById('remote-profile-pic');
+        if (imgElement) {
+            // Set fallback on error
+            imgElement.onerror = function () {
+                this.src = DEFAULT_AVATAR;
+            };
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const profilePic = urlParams.get('profilePic');
+            if (profilePic) {
+                remoteProfilePicUrl = decodeURIComponent(profilePic);
                 imgElement.src = remoteProfilePicUrl;
+            } else {
+                imgElement.src = DEFAULT_AVATAR;
             }
         }
     } catch (e) {
