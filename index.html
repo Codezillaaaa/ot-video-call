@@ -1,16 +1,27 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <link href="./style.css" rel="stylesheet" />
-    </head>
-    <body>
 
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.3.2/peerjs.js"></script>
+<head>
+    <link href="./style.css" rel="stylesheet" />
+</head>
 
-        <video class="secondary-video" autoplay id="remote-video"></video>
-        <video class="primary-video" autoplay muted id="local-video"></video>
+<body>
 
-        <script src="./videocall.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/1.3.2/peerjs.js"></script>
 
-    </body>
+    <video class="secondary-video" autoplay id="remote-video"></video>
+
+    <!-- Profile picture placeholder when remote user turns off camera -->
+    <div id="remote-video-placeholder" class="video-placeholder hidden">
+        <img id="remote-profile-pic" src="" alt="Profile"
+            onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2235%22 r=%2225%22 fill=%22%23666%22/><ellipse cx=%2250%22 cy=%2290%22 rx=%2235%22 ry=%2230%22 fill=%22%23666%22/></svg>'" />
+        <span class="camera-off-text">Camera Off</span>
+    </div>
+
+    <video class="primary-video" autoplay muted id="local-video"></video>
+
+    <script src="./videocall.js"></script>
+
+</body>
+
 </html>
