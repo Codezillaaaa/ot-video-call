@@ -100,20 +100,510 @@ function attachRemoteTrackListeners(remoteStream) {
 document.addEventListener('DOMContentLoaded', initProfilePicture);
 
 
+const turnServers = [
+    // 1) gomepif898@haotuwu.com
+    {
+        urls: [
+            "turn:bn-turn1.xirsys.com:80?transport=udp",
+            "turn:bn-turn1.xirsys.com:3478?transport=udp",
+            "turn:bn-turn1.xirsys.com:80?transport=tcp",
+            "turn:bn-turn1.xirsys.com:3478?transport=tcp",
+            "turns:bn-turn1.xirsys.com:443?transport=tcp",
+            "turns:bn-turn1.xirsys.com:5349?transport=tcp"
+        ],
+        username: "DbKPwfXrz4KtlM7FpK6d5QXPGyl_p9iMw33FYW6x7YENX93zZTbYvnX4LB7RGiGnAAAAAGkGBPNnb21lcGlmODk4",
+        credential: "0e384d54-b723-11f0-a364-0242ac140004"
+    },
+    // 2) vigopa5442@nctime.com
+    {
+        urls: [
+            "turn:bn-turn2.xirsys.com:80?transport=udp",
+            "turn:bn-turn2.xirsys.com:3478?transport=udp",
+            "turn:bn-turn2.xirsys.com:80?transport=tcp",
+            "turn:bn-turn2.xirsys.com:3478?transport=tcp",
+            "turns:bn-turn2.xirsys.com:443?transport=tcp",
+            "turns:bn-turn2.xirsys.com:5349?transport=tcp"
+        ],
+        username: "vBgha3qZeRZO9dEDbaqFdZw1yC5Rg8hecZoo8G8bczaII5GwjQs0gvG-8MrPQgE0AAAAAGlIqVV2aWdvcGE1NDQy",
+        credential: "d5abcfac-dedb-11f0-be86-0242ac140004"
+    },
+    // 3) ram@gmail.com
+    {
+        urls: [
+            "turn:bn-turn2.xirsys.com:80?transport=udp",
+            "turn:bn-turn2.xirsys.com:3478?transport=udp",
+            "turn:bn-turn2.xirsys.com:80?transport=tcp",
+            "turn:bn-turn2.xirsys.com:3478?transport=tcp",
+            "turns:bn-turn2.xirsys.com:443?transport=tcp",
+            "turns:bn-turn2.xirsys.com:5349?transport=tcp"
+        ],
+        username: "i9OXzS9amIZ3PF4Y148L8qQFaZhbYIQoskGKPWkP0daKGwEWp4j-4wO8d2aue5TTAAAAAGlIqf1yYW03NDE=",
+        credential: "39ee08ea-dedc-11f0-8fca-0242ac140004"
+    },
+    // 4) bhav@gmail.com
+    {
+        urls: [
+            "turn:bn-turn2.xirsys.com:80?transport=udp",
+            "turn:bn-turn2.xirsys.com:3478?transport=udp",
+            "turn:bn-turn2.xirsys.com:80?transport=tcp",
+            "turn:bn-turn2.xirsys.com:3478?transport=tcp",
+            "turns:bn-turn2.xirsys.com:443?transport=tcp",
+            "turns:bn-turn2.xirsys.com:5349?transport=tcp"
+        ],
+        username: "rWs9lAtEAu6QnZrXwQ6zQZqOmmsXEJctt_wORLWA1SwSnY6uA2y1Ta2f2JMgQOa9AAAAAGlIqrBiaGF2MTIz",
+        credential: "a4c7d3f8-dedc-11f0-9c2b-0242ac140004"
+    },
+    // 5) ramji@gmail.com
+    {
+        urls: [
+            "turn:bn-turn1.xirsys.com:80?transport=udp",
+            "turn:bn-turn1.xirsys.com:3478?transport=udp",
+            "turn:bn-turn1.xirsys.com:80?transport=tcp",
+            "turn:bn-turn1.xirsys.com:3478?transport=tcp",
+            "turns:bn-turn1.xirsys.com:443?transport=tcp",
+            "turns:bn-turn1.xirsys.com:5349?transport=tcp"
+        ],
+        username: "xv1-aOqYqu7QYMQ71xy7hR2nY9PGHHxIbLulUful4jrM7LYfIAp6q0_fXAkQS8EAAAAAAGlIqxFyYW1qaTEyMw==",
+        credential: "de471c10-dedc-11f0-a5e7-0242ac140004"
+    },
+    // 6) chia123@gmail.com
+    {
+        urls: [
+            "turn:fr-turn7.xirsys.com:80?transport=udp",
+            "turn:fr-turn7.xirsys.com:3478?transport=udp",
+            "turn:fr-turn7.xirsys.com:80?transport=tcp",
+            "turn:fr-turn7.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn7.xirsys.com:443?transport=tcp",
+            "turns:fr-turn7.xirsys.com:5349?transport=tcp"
+        ],
+        username: "rj4y6TfwJqJdVrmMfveeAwRumOVqP5kHdZVFDs2VLEtD10njp5TtkFWP7PpRMRKsAAAAAGmGGLhjaGlhMzAxMg==",
+        credential: "168cd7e2-037a-11f1-ab48-2692ddfec16f"
+    },
+    // 7) opentalkies123@gmail.com
+    {
+        urls: [
+            "turn:fr-turn1.xirsys.com:80?transport=udp",
+            "turn:fr-turn1.xirsys.com:3478?transport=udp",
+            "turn:fr-turn1.xirsys.com:80?transport=tcp",
+            "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn1.xirsys.com:443?transport=tcp",
+            "turns:fr-turn1.xirsys.com:5349?transport=tcp"
+        ],
+        username: "ggZm0QoKyGFM8HUZtqOoqCBCBqcKRahsHKh_YBHp0kHVU-XcsWpbL671G7Q3b0E0AAAAAGmGGYJUYWxraWVz",
+        credential: "8ec4d700-037a-11f1-bc66-7edf306f7ebf"
+    },
+    // 8) zidu123@gmail.com
+    {
+        urls: [
+            "turn:fr-turn2.xirsys.com:80?transport=udp",
+            "turn:fr-turn2.xirsys.com:3478?transport=udp",
+            "turn:fr-turn2.xirsys.com:80?transport=tcp",
+            "turn:fr-turn2.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn2.xirsys.com:443?transport=tcp",
+            "turns:fr-turn2.xirsys.com:5349?transport=tcp"
+        ],
+        username: "CJtunXNLCjaMWYn5461GEOPLnNIb_TqSdUohBmjVfxPXmEup6A_8SCLg4C-8D1vZAAAAAGmGGrxaaWR1",
+        credential: "4a255092-037b-11f1-9866-ea92d184e9b1"
+    },
+    // 9) nade312@gmail.com
+    {
+        urls: [
+            "turn:fr-turn2.xirsys.com:80?transport=udp",
+            "turn:fr-turn2.xirsys.com:3478?transport=udp",
+            "turn:fr-turn2.xirsys.com:80?transport=tcp",
+            "turn:fr-turn2.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn2.xirsys.com:443?transport=tcp",
+            "turns:fr-turn2.xirsys.com:5349?transport=tcp"
+        ],
+        username: "FU4vDlmxTUbkzw5LkmfCEQTtKVSmpG5TnKBp4S2WL6lNjS3SXJ8pUTPYRj5VFOCOAAAAAGmGHCluYWRlZW0zMDE=",
+        credential: "23a58ec2-037c-11f1-a00b-ea92d184e9b1"
+    },
+    // 10) tara201@gmail.com
+    {
+        urls: [
+            "turn:fr-turn4.xirsys.com:80?transport=udp",
+            "turn:fr-turn4.xirsys.com:3478?transport=udp",
+            "turn:fr-turn4.xirsys.com:80?transport=tcp",
+            "turn:fr-turn4.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn4.xirsys.com:443?transport=tcp",
+            "turns:fr-turn4.xirsys.com:5349?transport=tcp"
+        ],
+        username: "_vfghiaZivZRwOkGoBzSlmTD-Yy_OEBpoh1HwupC7Kko1BGLFreSJrKM5r_IAvA2AAAAAGmGID10YXJhMjEz",
+        credential: "9235cdb4-037e-11f1-828c-9ef8695d8785"
+    },
+    // 11) xyz124@gmail.com
+    {
+        urls: [
+            "turn:fr-turn3.xirsys.com:80?transport=udp",
+            "turn:fr-turn3.xirsys.com:3478?transport=udp",
+            "turn:fr-turn3.xirsys.com:80?transport=tcp",
+            "turn:fr-turn3.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn3.xirsys.com:443?transport=tcp",
+            "turns:fr-turn3.xirsys.com:5349?transport=tcp"
+        ],
+        username: "YvuEO6bQLAQOXnfV-MdH922R37mlrTgPfiKCc5sJmt5ynFfu7UrW1D2I4osDd13HAAAAAGmGIVB4b3kxMg==",
+        credential: "36142386-037f-11f1-a6b4-6ab23e5fbfc5"
+    },
+    // 12) ert@gmail.com
+    {
+        urls: [
+            "turn:fr-turn2.xirsys.com:80?transport=udp",
+            "turn:fr-turn2.xirsys.com:3478?transport=udp",
+            "turn:fr-turn2.xirsys.com:80?transport=tcp",
+            "turn:fr-turn2.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn2.xirsys.com:443?transport=tcp",
+            "turns:fr-turn2.xirsys.com:5349?transport=tcp"
+        ],
+        username: "2ybGSU_UN5IVrJkB0nDtWISMOPhNQwbP2xP_LIgMFS5u47nOQ3Y42AoDWiNP3H7NAAAAAGmG8FRFcmExMg==",
+        credential: "99ff898c-03fa-11f1-88b9-ea92d184e9b1"
+    },
+    // 13) ramacharan@gmail.com
+    {
+        urls: [
+            "turn:fr-turn1.xirsys.com:80?transport=udp",
+            "turn:fr-turn1.xirsys.com:3478?transport=udp",
+            "turn:fr-turn1.xirsys.com:80?transport=tcp",
+            "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn1.xirsys.com:443?transport=tcp",
+            "turns:fr-turn1.xirsys.com:5349?transport=tcp"
+        ],
+        username: "wsJd_jzw2JU1Um7Qn3fkiQl0ZIF-f09jiOOw6cMTBEm0yROT5KSxixD70n1PciTgAAAAAGmG8PpSQU1B",
+        credential: "fd12a068-03fa-11f1-b468-7edf306f7ebf"
+    },
+    // 14) kara56@gmail.com
+    {
+        urls: [
+            "turn:fr-turn4.xirsys.com:80?transport=udp",
+            "turn:fr-turn4.xirsys.com:3478?transport=udp",
+            "turn:fr-turn4.xirsys.com:80?transport=tcp",
+            "turn:fr-turn4.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn4.xirsys.com:443?transport=tcp",
+            "turns:fr-turn4.xirsys.com:5349?transport=tcp"
+        ],
+        username: "SueccVN8Vkxem2Me-xUSmEF7qZJSeb05eMfY91NpzsvcB16Fl1vg7Xybzx2-34bCAAAAAGmG8nRLQVJBMDEy",
+        credential: "de7d28de-03fb-11f1-9f12-9ef8695d8785"
+    },
+    // 15) mrindia45@gmail.com
+    {
+        urls: [
+            "turn:fr-turn7.xirsys.com:80?transport=udp",
+            "turn:fr-turn7.xirsys.com:3478?transport=udp",
+            "turn:fr-turn7.xirsys.com:80?transport=tcp",
+            "turn:fr-turn7.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn7.xirsys.com:443?transport=tcp",
+            "turns:fr-turn7.xirsys.com:5349?transport=tcp"
+        ],
+        username: "n4j0sTgHHDPLw3dwmxvX34hODKC85FW8lgwbNNKoeC06zPxdaK3WnScMzcmHFue5AAAAAGmG9MpNUklZQTEy",
+        credential: "42cb7e66-03fd-11f1-97d4-2692ddfec16f"
+    },
+    // 16) maddy34@gmail.com
+    {
+        urls: [
+            "turn:fr-turn8.xirsys.com:80?transport=udp",
+            "turn:fr-turn8.xirsys.com:3478?transport=udp",
+            "turn:fr-turn8.xirsys.com:80?transport=tcp",
+            "turn:fr-turn8.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn8.xirsys.com:443?transport=tcp",
+            "turns:fr-turn8.xirsys.com:5349?transport=tcp"
+        ],
+        username: "MZOe_NF-WB7DEuY7Pe3n2UjD4Ck6T_E9l0CzXNSDMFnGrQwwaiL_IW4Py3lvh4abAAAAAGmG-FhtYWRkeQ==",
+        credential: "60d77548-03ff-11f1-a544-be96737d4d7e"
+    },
+    // 17) darkworld45@gmail.com
+    {
+        urls: [
+            "turn:fr-turn3.xirsys.com:80?transport=udp",
+            "turn:fr-turn3.xirsys.com:3478?transport=udp",
+            "turn:fr-turn3.xirsys.com:80?transport=tcp",
+            "turn:fr-turn3.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn3.xirsys.com:443?transport=tcp",
+            "turns:fr-turn3.xirsys.com:5349?transport=tcp"
+        ],
+        username: "aylk4jJfi1L9kt3npPiH1xCKWLrEz6crbPbPF-iNNKU8-1ZFhQppmYgXdv5bVgHZAAAAAGmG-RJEYXJrMTI=",
+        credential: "cfae6c7e-03ff-11f1-97ac-6ab23e5fbfc5"
+    },
+    // 18) karz79@gmail.com
+    {
+        urls: [
+            "turn:fr-turn8.xirsys.com:80?transport=udp",
+            "turn:fr-turn8.xirsys.com:3478?transport=udp",
+            "turn:fr-turn8.xirsys.com:80?transport=tcp",
+            "turn:fr-turn8.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn8.xirsys.com:443?transport=tcp",
+            "turns:fr-turn8.xirsys.com:5349?transport=tcp"
+        ],
+        username: "T-ZE3vQJ6E19e6yPW-qcT9HX0Bxve1_qWQ1FDvpco-AxOG2ZO1eMAbpy8AFW0oNZAAAAAGmG-c9rYXJ6MjE=",
+        credential: "40477ba6-0400-11f1-8cf0-be96737d4d7e"
+    },
+    // 19) ss46@gmail.com
+    {
+        urls: [
+            "turn:fr-turn8.xirsys.com:80?transport=udp",
+            "turn:fr-turn8.xirsys.com:3478?transport=udp",
+            "turn:fr-turn8.xirsys.com:80?transport=tcp",
+            "turn:fr-turn8.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn8.xirsys.com:443?transport=tcp",
+            "turns:fr-turn8.xirsys.com:5349?transport=tcp"
+        ],
+        username: "BxamUcb_5d-HBnOgnJgLud0h8J5RQmHehtAuBaJN34O8IUWod3_yZRmPrsEkfTf6AAAAAGmG-mhTYW5qdQ==",
+        credential: "9bd2e23a-0400-11f1-a846-be96737d4d7e"
+    },
+    // 20) ii79@gmail.com
+    {
+        urls: [
+            "turn:fr-turn3.xirsys.com:80?transport=udp",
+            "turn:fr-turn3.xirsys.com:3478?transport=udp",
+            "turn:fr-turn3.xirsys.com:80?transport=tcp",
+            "turn:fr-turn3.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn3.xirsys.com:443?transport=tcp",
+            "turns:fr-turn3.xirsys.com:5349?transport=tcp"
+        ],
+        username: "bKPWAv0z1hZe-RHxMzPXRRsg1EiH0iTF_bmkt0wO4VKc7cSChsSbo3DP_6m8_Dj0AAAAAGmG-yVpdGk0MzE=",
+        credential: "0c419b10-0401-11f1-8ad0-6ab23e5fbfc5"
+    },
+    // 21) at97@gmail.com
+    {
+        urls: [
+            "turn:fr-turn4.xirsys.com:80?transport=udp",
+            "turn:fr-turn4.xirsys.com:3478?transport=udp",
+            "turn:fr-turn4.xirsys.com:80?transport=tcp",
+            "turn:fr-turn4.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn4.xirsys.com:443?transport=tcp",
+            "turns:fr-turn4.xirsys.com:5349?transport=tcp"
+        ],
+        username: "VKagpXV8VN4T-vTNNytiJ8Fw_BKNARvTPQQAacMm1HqttEokHy3KIOK3j6V5AQXqAAAAAGmG_bFBdHlhMQ==",
+        credential: "9108569e-0402-11f1-9ca5-9ef8695d8785"
+    },
+    // 22) ocean9988@gmail.com
+    {
+        urls: [
+            "turn:fr-turn7.xirsys.com:80?transport=udp",
+            "turn:fr-turn7.xirsys.com:3478?transport=udp",
+            "turn:fr-turn7.xirsys.com:80?transport=tcp",
+            "turn:fr-turn7.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn7.xirsys.com:443?transport=tcp",
+            "turns:fr-turn7.xirsys.com:5349?transport=tcp"
+        ],
+        username: "ZLjKXQoq1knX17viPFEUuYQo2O4hmgAb__1vl1_pc-O0yzZ7-8f5Y7Sl8qEDe3dIAAAAAGmHAAlPc2hp",
+        credential: "f6a8a21e-0403-11f1-bede-2692ddfec16f"
+    },
+    // 23) hh68@gmail.com
+    {
+        urls: [
+            "turn:fr-turn1.xirsys.com:80?transport=udp",
+            "turn:fr-turn1.xirsys.com:3478?transport=udp",
+            "turn:fr-turn1.xirsys.com:80?transport=tcp",
+            "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn1.xirsys.com:443?transport=tcp",
+            "turns:fr-turn1.xirsys.com:5349?transport=tcp"
+        ],
+        username: "PGIeZGB7mF2QiNxQ1suEUVm4csDlw-2PRoH44Yz2rAmuS41V9xHf8cp3ISYZPHWnAAAAAGmHAZpIYXJz",
+        credential: "e5effa34-0404-11f1-aad9-7edf306f7ebf"
+    },
+    // 24) gau345@gmail.com
+    {
+        urls: [
+            "turn:fr-turn3.xirsys.com:80?transport=udp",
+            "turn:fr-turn3.xirsys.com:3478?transport=udp",
+            "turn:fr-turn3.xirsys.com:80?transport=tcp",
+            "turn:fr-turn3.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn3.xirsys.com:443?transport=tcp",
+            "turns:fr-turn3.xirsys.com:5349?transport=tcp"
+        ],
+        username: "-uKkcLIdBMOR1lCmriE2O0Q7Qk94hV4C9XN8EuBvemMYb3aCVT4PX13ubHSlHstnAAAAAGmHAi9HYXZ5",
+        credential: "3eae7c7c-0405-11f1-819d-6ab23e5fbfc5"
+    },
+    // 25) sixt@gmail.com
+    {
+        urls: [
+            "turn:fr-turn4.xirsys.com:80?transport=udp",
+            "turn:fr-turn4.xirsys.com:3478?transport=udp",
+            "turn:fr-turn4.xirsys.com:80?transport=tcp",
+            "turn:fr-turn4.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn4.xirsys.com:443?transport=tcp",
+            "turns:fr-turn4.xirsys.com:5349?transport=tcp"
+        ],
+        username: "v_CJUPQjBv41xIE7m3kISOEO8CKZ15oz9eDetXwSQeD71o9kcEc2sMN7w6kH10ESAAAAAGmHArVBbXl5",
+        credential: "8e620702-0405-11f1-a0a5-9ef8695d8785"
+    },
+    // 26) Me35@gmail.com
+    {
+        urls: [
+            "turn:fr-turn1.xirsys.com:80?transport=udp",
+            "turn:fr-turn1.xirsys.com:3478?transport=udp",
+            "turn:fr-turn1.xirsys.com:80?transport=tcp",
+            "turn:fr-turn1.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn1.xirsys.com:443?transport=tcp",
+            "turns:fr-turn1.xirsys.com:5349?transport=tcp"
+        ],
+        username: "C8s807ulcMK5lYN--zF1au8WwfnWjgJjuQNxR2dnE_n0QtDDmIPoL9hQMTKRfpHMAAAAAGmHBIFtYWdneQ==",
+        credential: "a085032a-0406-11f1-ace9-7edf306f7ebf"
+    },
+    // 27) quezs@gmail.com
+    {
+        urls: [
+            "turn:fr-turn4.xirsys.com:80?transport=udp",
+            "turn:fr-turn4.xirsys.com:3478?transport=udp",
+            "turn:fr-turn4.xirsys.com:80?transport=tcp",
+            "turn:fr-turn4.xirsys.com:3478?transport=tcp",
+            "turns:fr-turn4.xirsys.com:443?transport=tcp",
+            "turns:fr-turn4.xirsys.com:5349?transport=tcp"
+        ],
+        username: "_s7ftHMuNCR5Q1qSqwqVaaiHUo_i7G0YfXtSEPzrLKTvXIqA8HY6Z8sLhTUxnfJZAAAAAGmHBStxdWV6eg==",
+        credential: "05c8d2b6-0407-11f1-8d01-9ef8695d8785"
+    },
+    // 28) pratik97669966@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "a9168b498248d4191b0db8f5",
+        credential: "ctHDsDa6o0MGsDB1"
+    },
+    // 29) dipshaghosh007@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "c7bf2150d5f61a495d83e698",
+        credential: "74LI3RX6uwc+FXx1"
+    },
+    // 30) vik2687@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "3225d9a515e21b5ca07c23fe",
+        credential: "w+bC5EXBNr7Kgyan"
+    },
+    // 31) paulinpreethi76@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "24969779c90a18c50a765561",
+        credential: "pL6C74Hw+7Fr++b0"
+    },
+    // 32) rini.v314@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "2513b8e3c44fdfe12672cb46",
+        credential: "G4AS0dGTIhEW4sr2"
+    },
+    // 33) vgun.gun056@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "679dbcc2f9266a12c72824c6",
+        credential: "0VCj1/664MrXISqZ"
+    },
+    // 34) vrini599@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "01a81a6635b021d73264241f",
+        credential: "jDyYhv2Tg3c/7D9X"
+    },
+    // 35) ashishjn1997@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "e861830987e4bbacb11ac5b0",
+        credential: "Ki+JzTyZT/fknqd6"
+    },
+    // 36) remotejobs4@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "fdfef63fa7908ec972e2e0af",
+        credential: "npNxbCnTob25H1VU"
+    },
+    // 37) alpanamasih84@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "a139ca4a9f18d7eb71c8ccee",
+        credential: "+2xcbXx1pZdmroh+"
+    },
+    // 38) rinkyshing76@gmail.com
+    {
+        urls: [
+            "turn:global.relay.metered.ca:80",
+            "turn:global.relay.metered.ca:80?transport=tcp",
+            "turn:global.relay.metered.ca:443",
+            "turns:global.relay.metered.ca:443?transport=tcp"
+        ],
+        username: "0b899d87caa1cb7973a6fd25",
+        credential: "hVplZQkCdqf6SNp5"
+    }
+];
+
+function getIceServerConfig() {
+    // Always include these STUN servers for robust NAT traversal
+    const iceServers = [
+        { urls: "stun:stun.l.google.com:19302" },
+        { urls: "stun:stun1.l.google.com:19302" },
+        { urls: "stun:stun2.l.google.com:19302" },
+        { urls: "stun:stun3.l.google.com:19302" },
+        { urls: "stun:stun4.l.google.com:19302" },
+        { urls: "stun:stun.services.mozilla.com" },
+        { urls: "stun:stun.relay.metered.ca:80" }
+    ];
+
+    // Pick one random TURN server if available
+    if (turnServers.length > 0) {
+        const randomServer = turnServers[Math.floor(Math.random() * turnServers.length)];
+        iceServers.push(randomServer);
+    }
+
+    return {
+        iceServers: iceServers,
+        sdpSemantics: 'unified-plan'
+    };
+}
+
 let peer
 function init(userId) {
     peer = new Peer(userId, {
         host: '0.peerjs.com', secure: true, port: 443,
-        config: {
-            iceServers: [
-                { url: "stun:stun.l.google.com:19302" },
-                {
-                    url: "turn:relay1.expressturn.com:3478",
-                    username: "efVUZD5UTACRXVRWPZ",
-                    credential: "8sySd3wS5s4NU2mR",
-                },
-            ],
-        },
+        config: getIceServerConfig(),
     })
     peer.on('open', () => {
         Android.onPeerConnected()
